@@ -1,0 +1,6 @@
+[build]
+  command = "python -m pip install -r requirements.txt && python build.py"
+  publish = "site"
+
+  [build.environment]
+    PYTHON_VERSION = "3.13"
