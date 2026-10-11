@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creamy Coconut Lime Chicken · My Cookbook</title>
+<meta name="description" content="Golden-seared chicken simmered in a silky coconut sauce, finished with fresh lime and coriander.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Londrina+Solid&display=swap" rel="stylesheet">
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #eef0f4;
+  --card: #ffffff;
+  --ink: #1c1b1a;
+  --muted: #6b665f;
+  --panel: #eeeae6;
+  --line: #1c1b1a;
+  --soft-line: #e3dfd9;
+  --accent: #4f6b35;
+  --accent-ink: #ffffff;
+  --shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 8px 30px rgba(20, 20, 20, 0.05);
+  --display: "Londrina Solid", "Arial Narrow", Impact, sans-serif;
+  --serif: "Crimson Pro", Georgia, "Times New Roman", serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131415;
+    --card: #1c1d1f;
+    --ink: #efece7;
+    --muted: #a39d94;
+    --panel: #282623;
+    --line: #efece7;
+    --soft-line: #34322f;
+    --accent: #9dbb7a;
+    --accent-ink: #14160f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 30px rgba(0, 0, 0, 0.25);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #131415;
+  --card: #1c1d1f;
+  --ink: #efece7;
+  --muted: #a39d94;
+  --panel: #282623;
+  --line: #efece7;
+  --soft-line: #34322f;
+  --accent: #9dbb7a;
+  --accent-ink: #14160f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 30px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  padding: 16px;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+.wrap { max-width: 1100px; margin: 0 auto; }
+
+.topnav {
+  max-width: 1100px;
+  margin: 0 auto 14px;
+  padding: 0 4px;
+  font-size: 1rem;
+}
+.topnav a {
+  text-decoration: none;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+.topnav a:hover { color: var(--ink); }
+
+/* ---------- Recipe sheet ---------- */
+.sheet {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 36px;
+  box-shadow: var(--shadow);
+  padding: 44px 48px 52px;
+}
+
+.sheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px 40px;
+  margin-bottom: 34px;
+}
+
+.sheet-head h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7vw, 4.6rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+}
+
+.sub {
+  margin-top: 14px;
+  max-width: 38em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 8px;
+  flex: none;
+}
+.meta li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  white-space: nowrap;
+}
+.meta svg { width: 30px; height: 30px; flex: none; }
+
+.hero {
+  border-radius: 28px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--panel);
+  margin-bottom: 38px;
+}
+.hero img { width: 100%; height: 100%; object-fit: cover; }
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 0;
+  align-items: stretch;
+}
+
+.ingredients {
+  background: var(--panel);
+  border-radius: 28px;
+  padding: 30px 34px 34px;
+  align-self: start;
+}
+
+.ingredients h2,
+.directions h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.ingredients h3 {
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 20px 0 8px;
+}
+
+.ingredients li {
+  padding: 5px 0;
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+.directions {
+  border-left: 1.5px solid var(--line);
+  margin-left: 40px;
+  padding: 30px 0 0 40px;
+}
+
+.directions ol {
+  counter-reset: step;
+  display: grid;
+  gap: 12px;
+}
+.directions li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 1.6em 1fr;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+.directions li::before {
+  content: counter(step) ".";
+  font-variant-numeric: tabular-nums;
+}
+
+.notes {
+  margin-top: 40px;
+  padding-top: 26px;
+  border-top: 1px solid var(--soft-line);
+}
+.notes h2 {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.notes p + p { margin-top: 10px; }
+
+.credit {
+  margin-top: 34px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---------- Listing page ---------- */
+.masthead { padding: 28px 8px 10px; }
+.masthead h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 9vw, 5.6rem);
+  line-height: 0.95;
+}
+.masthead p {
+  margin-top: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.searchbar { margin: 26px 0 14px; }
+.searchbar input {
+  width: 100%;
+  font: inherit;
+  font-size: 1.2rem;
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--soft-line);
+  border-radius: 999px;
+  padding: 15px 24px;
+  box-shadow: var(--shadow);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.searchbar input::placeholder { color: var(--muted); opacity: 0.8; }
+.searchbar input:focus { border-color: var(--accent); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.tags button {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  padding: 4px 14px;
+  cursor: pointer;
+}
+.tags button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.tags button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.status {
+  min-height: 1.6em;
+  margin: 10px 4px 14px;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.card[hidden] { display: none; }
+.card a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+}
+.card .thumb {
+  aspect-ratio: 4 / 3;
+  background: var(--panel);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.card .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.card a:hover .thumb img { transform: scale(1.03); }
+.card .thumb .initial {
+  font-family: var(--display);
+  font-size: 4.5rem;
+  color: var(--muted);
+  opacity: 0.55;
+}
+.card .body { padding: 18px 22px 22px; }
+.card h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.9rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.card .desc {
+  margin-top: 8px;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card .facts {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.95rem;
+}
+.card .chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.card .chips span {
+  font-size: 0.82rem;
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 1px 10px;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 50px 10px;
+}
+.empty[hidden] { display: none; }
+
+footer.site {
+  max-width: 1100px;
+  margin: 36px auto 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 760px) {
+  body { padding: 16px; font-size: 1.06rem; }
+  .sheet { border-radius: 28px; padding: 26px 20px 34px; }
+  .sheet-head { flex-direction: column; gap: 18px; margin-bottom: 24px; }
+  .meta { flex-direction: row; flex-wrap: wrap; gap: 8px 22px; padding-top: 0; }
+  .meta li { font-size: 1.1rem; }
+  .meta svg { width: 26px; height: 26px; }
+  .hero { aspect-ratio: 4 / 3; border-radius: 22px; margin-bottom: 26px; }
+  .cols { grid-template-columns: 1fr; gap: 30px; }
+  .ingredients { border-radius: 22px; padding: 24px 22px 26px; }
+  .directions { border-left: 0; margin-left: 0; padding: 0; }
+  .ingredients h2, .directions h2 { font-size: 1.7rem; }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  body { background: #fff; padding: 0; color: #000; }
+  .topnav, footer.site { display: none; }
+  .sheet { box-shadow: none; border-radius: 0; padding: 0; background: #fff; }
+  .hero { aspect-ratio: 16 / 7; }
+  .ingredients { background: #f1eeea; }
+}
+
+</style>
+</head>
+<body>
+<nav class="topnav"><a href="../index.html">&larr; All recipes</a></nav>
+<main class="sheet">
+  <header class="sheet-head">
+    <div>
+      <h1>Creamy Coconut Lime Chicken</h1>
+      <p class="sub">Golden-seared chicken simmered in a silky coconut sauce, finished with fresh lime and coriander.</p>
+    </div>
+    
+  </header>
+  <figure class="hero"><img src="../images/creamy-coconut-lime-chicken.jpg" alt="Creamy Coconut Lime Chicken"></figure>
+  <div class="cols">
+    <section class="ingredients">
+      <h2>Ingredients</h2>
+      <ul><li>6–8 chicken thighs, or 4–5 breasts</li><li>Paprika</li><li>1 large shallot</li><li>1 green chilli</li><li>1 tbsp minced garlic</li><li>1 tbsp minced ginger</li><li>200 ml chicken stock</li><li>400 ml coconut milk</li><li>160 ml coconut cream</li><li>1 tbsp dark soy sauce</li><li>1 tbsp fish sauce</li><li>Coriander</li><li>Lime, zest and juice</li><li>Olive oil, 1–2 tbsp</li><li>Salt and pepper</li></ul>
+    </section>
+    <section class="directions">
+      <h2>Directions</h2>
+      <ol><li><span>Heat 1–2 tbsp olive oil in a large pan. Add the chicken and season with salt, pepper and paprika. Cook on both sides until golden, then remove.</span></li><li><span>Add the shallot and chilli and cook for 3–5 minutes over low heat. Stir through the ginger, garlic and lime zest and heat for 1–2 minutes.</span></li><li><span>Pour in the stock, coconut milk and coconut cream. Keep a little cream back to top the chicken at the end.</span></li><li><span>Mix in the soy sauce, return the chicken to the pan, cover and cook for 10–15 minutes over low heat, until the chicken is cooked through and the sauce has thickened.</span></li><li><span>Serve with the fish sauce, lime juice, dollops of coconut cream, coriander and lime slices.</span></li></ol>
+    </section>
+  </div>
+  
+  <p class="credit">Recipe credit: @healthyfitbella_ (shared via mediterranean.diet.plan)</p>
+</main>
+</body>
+</html>
