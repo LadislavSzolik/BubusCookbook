@@ -17,6 +17,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
 import yaml
 
@@ -43,6 +44,11 @@ ICON_TIME = (
     '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" '
     'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
     '<circle cx="16" cy="16" r="12"/><path d="M16 9v7l4 3"/></svg>'
+)
+ICON_PLAY = (
+    '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<circle cx="16" cy="16" r="12"/><path d="M13 10.5v11l9-5.5z"/></svg>'
 )
 
 
@@ -85,6 +91,19 @@ def fmt_time(v):
     if isinstance(v, (int, float)) and not isinstance(v, bool):
         return f"{int(v)} minutes"
     return str(v)
+
+
+def clean_video_url(value, name):
+    """Accept only full http(s) links. Instagram share parameters (?xtok=, ?igsh=) are dropped."""
+    url = str(value).strip()
+    parts = urlsplit(url)
+    if parts.scheme not in ("http", "https") or not parts.netloc:
+        print(f"  warning: {name}: 'video' must be a full link starting with https://, ignoring: {url}")
+        return ""
+    host = parts.netloc.lower()
+    if host == "instagram.com" or host.endswith(".instagram.com"):
+        parts = parts._replace(query="", fragment="")
+    return urlunsplit(parts)
 
 
 def slugify(name):
@@ -216,6 +235,7 @@ def load_recipe(path, images_dir):
         "servings": fmt_servings(meta.get("servings")),
         "time": fmt_time(meta.get("time")),
         "source": str(source) if source else "",
+        "video": clean_video_url(meta["video"], path.name) if meta.get("video") else "",
         "cover_src": cover_src,
         "cover": f"images/{cover_src.name}" if cover_src else None,
         "ingredient_groups": ingredients,
@@ -262,6 +282,11 @@ def sheet_html(r, img_src, nav_html):
         meta_items.append(f"<li>{ICON_SERVINGS}<span>{esc(r['servings'])}</span></li>")
     if r["time"]:
         meta_items.append(f"<li>{ICON_TIME}<span>{esc(r['time'])}</span></li>")
+    if r["video"]:
+        meta_items.append(
+            f'<li><a class="watch" href="{esc(r["video"])}" target="_blank" rel="noopener noreferrer">'
+            f"{ICON_PLAY}<span>Watch video</span></a></li>"
+        )
     meta_html = f'<ul class="meta">{"".join(meta_items)}</ul>' if meta_items else ""
     sub_html = f'<p class="sub">{inline(r["description"])}</p>' if r["description"] else ""
 

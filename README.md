@@ -31,7 +31,8 @@ servings: 2                                                   # optional, shown 
 time: 15 minutes                                              # optional, shown top right
 tags: [breakfast, vegetarian]                                 # optional, used for filter chips and search
 cover: ../images/avocado-toast.jpg                            # optional hero image
-source: "@someone on Instagram"                               # optional credit
+source: "@someone on Instagram"                               # optional credit, shown at the bottom
+video: https://www.instagram.com/reel/XXXXXXXXXXX/            # optional link, shown top right as "Watch video"
 ---
 
 ## Ingredients

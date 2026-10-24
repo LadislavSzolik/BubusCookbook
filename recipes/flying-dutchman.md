@@ -2,7 +2,8 @@
 title: Flying Dutchman
 description: A lighter take on the viral In-N-Out burger, with lean beef and melted cheddar between two grilled onion slices instead of a bun.
 cover: ../images/flying-dutchman.jpg
-source: "[@restorativefoodie on Instagram](https://www.instagram.com/reel/DezambwRnOe/)"
+source: "@restorativefoodie on Instagram"
+video: https://www.instagram.com/reel/DezambwRnOe/
 tags: [beef, burger, dinner]
 ---
 
