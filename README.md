@@ -52,7 +52,7 @@ Optional section for tips.
 
 - Without `cover:`, the build uses `images/<file-name>.jpg` (or .png, .webp) if it exists. With no image the recipe page simply has no hero.
 - A recipe with no `## Method` section (some posts only list ingredients) still builds: the ingredients card spans the full width and the Directions column is left out.
-- Ingredients can be grouped with `### Sauce`, `### To serve` and so on.
+- Ingredients can be grouped with `### Sauce`, `### To serve` and so on. The same works inside `## Method`: a `### Name` line starts a new group of steps with its own heading, and the numbering restarts (useful when a post has several parts, like a main and its sides).
 - `servings: 2` shows as "2 servings" and `time: 15` as "15 minutes". Any text works too, for example `time: 1 hr 30 min`.
 
 ## Search

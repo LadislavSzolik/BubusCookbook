@@ -171,10 +171,21 @@ def parse_ingredients(lines):
 
 
 def parse_steps(lines):
-    steps = []
+    """Return [{'heading': str|None, 'items': [steps]}]. '### Name' lines start a new group
+    (for recipes with several parts, e.g. 'Potatoes' and 'Asparagus'); numbering restarts per group."""
+    groups, current = [], None
     for line in lines:
         if not line.strip():
             continue
+        h = re.match(r"^###\s+(.*)$", line.strip())
+        if h:
+            current = {"heading": h.group(1).strip(), "items": []}
+            groups.append(current)
+            continue
+        if current is None:
+            current = {"heading": None, "items": []}
+            groups.append(current)
+        steps = current["items"]
         m = re.match(r"^\s*\d+[.)]\s+(.*)$", line)
         if m:
             steps.append(m.group(1).strip())
@@ -182,7 +193,7 @@ def parse_steps(lines):
             steps[-1] += " " + line.strip()
         else:
             steps.append(re.sub(r"^[-*+]\s+", "", line.strip()))
-    return steps
+    return [g for g in groups if g["items"]]
 
 
 def parse_paragraphs(lines):
@@ -238,7 +249,8 @@ def load_recipe(path, images_dir):
                 break
 
     ingredients = parse_ingredients(pick(ING_NAMES))
-    steps = parse_steps(pick(STEP_NAMES))
+    step_groups = parse_steps(pick(STEP_NAMES))
+    steps = [s for g in step_groups for s in g["items"]]  # flat list, used by search
     if not ingredients:
         print(f"  warning: {path.name}: no '## Ingredients' list found")
     if not steps:
@@ -258,6 +270,7 @@ def load_recipe(path, images_dir):
         "cover": f"images/{cover_src.name}" if cover_src else None,
         "ingredient_groups": ingredients,
         "steps": steps,
+        "step_groups": step_groups,
         "notes": parse_paragraphs(pick(NOTE_NAMES)),
     }
 
@@ -321,11 +334,15 @@ def sheet_html(r, img_src, nav_html):
 
     # A recipe without a method (some posts only list ingredients) gets a full-width ingredients card.
     if r["steps"]:
-        steps_html = "".join(f"<li><span>{inline(s)}</span></li>" for s in r["steps"])
+        steps_html = ""
+        for g in r["step_groups"]:
+            if g["heading"]:
+                steps_html += f"<h3>{inline(g['heading'])}</h3>"
+            steps_html += "<ol>" + "".join(f"<li><span>{inline(s)}</span></li>" for s in g["items"]) + "</ol>"
         cols_class = "cols"
         directions_html = (
             '<section class="directions">\n      <h2>Directions</h2>\n'
-            f"      <ol>{steps_html}</ol>\n    </section>"
+            f"      {steps_html}\n    </section>"
         )
     else:
         cols_class = "cols no-steps"
