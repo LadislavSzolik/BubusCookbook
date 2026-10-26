@@ -31,7 +31,7 @@ IMAGE_EXTS = ("jpg", "jpeg", "png", "webp")
 
 FONTS = (
     "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400"
-    "&family=Londrina+Solid&display=swap"
+    "&family=Open+Sans:wght@600;700&display=swap"
 )
 
 ICON_SERVINGS = (
