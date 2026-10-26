@@ -179,6 +179,14 @@ ul, ol { padding: 0; list-style: none; }
   align-self: start;
 }
 
+/* No method on the post: ingredients span the card in two columns */
+.cols.no-steps { grid-template-columns: minmax(0, 1fr); }
+.cols.no-steps .ingredients { columns: 2; column-gap: 56px; padding-bottom: 28px; }
+.cols.no-steps .ingredients h2 { column-span: all; }
+.cols.no-steps .ingredients h3:first-of-type { margin-top: 0; }
+.cols.no-steps .ingredients h3 { break-after: avoid; }
+.cols.no-steps .ingredients ul { break-inside: avoid; }
+
 .ingredients h2,
 .directions h2 {
   font-family: var(--serif);
@@ -215,6 +223,14 @@ ul, ol { padding: 0; list-style: none; }
   display: grid;
   gap: 12px;
 }
+.directions h3 {
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.directions ol + h3 { margin-top: 30px; }
 .directions li {
   counter-increment: step;
   display: grid;
@@ -400,6 +416,7 @@ footer.site {
   .meta svg { width: 26px; height: 26px; }
   .hero { aspect-ratio: 4 / 3; border-radius: 22px; margin-bottom: 26px; }
   .cols { grid-template-columns: 1fr; gap: 30px; }
+  .cols.no-steps .ingredients { columns: 1; }
   .ingredients { border-radius: 22px; padding: 24px 22px 26px; }
   .directions { border-left: 0; margin-left: 0; padding: 0; }
   .ingredients h2, .directions h2 { font-size: 1.7rem; }
