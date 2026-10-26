@@ -117,11 +117,15 @@ VIDEO_HOSTS = ("youtube.com", "youtu.be", "tiktok.com", "vimeo.com")
 
 
 def video_link_info(url):
-    """Label and icon for the link: reels and video sites say 'Watch video', other posts say 'View original post'."""
+    """Label and icon for the link: reels and video sites say 'Watch video', other Instagram posts
+    say 'View original post', and any other website says 'View original recipe'."""
     parts = urlsplit(url)
-    if "/reel/" in parts.path or "/tv/" in parts.path or parts.netloc.lower().endswith(VIDEO_HOSTS):
+    host = parts.netloc.lower()
+    if "/reel/" in parts.path or "/tv/" in parts.path or host.endswith(VIDEO_HOSTS):
         return "Watch video", ICON_PLAY
-    return "View original post", ICON_LINK
+    if host == "instagram.com" or host.endswith(".instagram.com"):
+        return "View original post", ICON_LINK
+    return "View original recipe", ICON_LINK
 
 
 def slugify(name):
