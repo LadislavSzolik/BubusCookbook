@@ -319,7 +319,17 @@ def sheet_html(r, img_src, nav_html):
             ing_html += f"<h3>{inline(g['heading'])}</h3>"
         ing_html += "<ul>" + "".join(f"<li>{inline(i)}</li>" for i in g["items"]) + "</ul>"
 
-    steps_html = "".join(f"<li><span>{inline(s)}</span></li>" for s in r["steps"])
+    # A recipe without a method (some posts only list ingredients) gets a full-width ingredients card.
+    if r["steps"]:
+        steps_html = "".join(f"<li><span>{inline(s)}</span></li>" for s in r["steps"])
+        cols_class = "cols"
+        directions_html = (
+            '<section class="directions">\n      <h2>Directions</h2>\n'
+            f"      <ol>{steps_html}</ol>\n    </section>"
+        )
+    else:
+        cols_class = "cols no-steps"
+        directions_html = ""
 
     notes = ""
     if r["notes"]:
@@ -343,15 +353,12 @@ def sheet_html(r, img_src, nav_html):
     {meta_html}
   </header>
   {hero}
-  <div class="cols">
+  <div class="{cols_class}">
     <section class="ingredients">
       <h2>Ingredients</h2>
       {ing_html}
     </section>
-    <section class="directions">
-      <h2>Directions</h2>
-      <ol>{steps_html}</ol>
-    </section>
+    {directions_html}
   </div>
   {notes}
   {credit}
