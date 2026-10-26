@@ -19,7 +19,7 @@ tags: [chicken, dinner]
 - Chicken breast
 - Soy sauce
 - Black pepper
-- Egg
+- 1 Egg
 - Cornstarch
 
 ### For the glaze
@@ -34,8 +34,8 @@ tags: [chicken, dinner]
 
 ## Method
 
-1. Mix the chicken breast pieces with soy sauce, black pepper and egg. Refrigerate.
-2. Add the cornstarch and mix. Cook the chicken in the air fryer. (The original fries it in oil.)
+1. Mix the chicken breast pieces with soy sauce, black pepper and egg. Refrigerate in 15 min.
+2. Add the cornstarch to the mix. Cook the chicken in the air fryer. (The original fries it in oil.)
 3. Cook the air-fried chicken pieces in butter, soy sauce, garlic, sesame seeds, green onions, honey and water.
 
 ## Notes
