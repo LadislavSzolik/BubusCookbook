@@ -17,7 +17,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import yaml
 
@@ -44,6 +44,11 @@ ICON_TIME = (
     '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" '
     'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
     '<circle cx="16" cy="16" r="12"/><path d="M16 9v7l4 3"/></svg>'
+)
+ICON_LINK = (
+    '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<circle cx="16" cy="16" r="12"/><path d="M12 20l8-8M13 12h7v7"/></svg>'
 )
 ICON_PLAY = (
     '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" '
@@ -94,7 +99,8 @@ def fmt_time(v):
 
 
 def clean_video_url(value, name):
-    """Accept only full http(s) links. Instagram share parameters (?xtok=, ?igsh=) are dropped."""
+    """Accept only full http(s) links. On Instagram, share parameters (?xtok=, ?igsh=, ?cplk=)
+    are dropped, but ?img_index= is kept so a carousel post opens on the right slide."""
     url = str(value).strip()
     parts = urlsplit(url)
     if parts.scheme not in ("http", "https") or not parts.netloc:
@@ -102,8 +108,20 @@ def clean_video_url(value, name):
         return ""
     host = parts.netloc.lower()
     if host == "instagram.com" or host.endswith(".instagram.com"):
-        parts = parts._replace(query="", fragment="")
+        keep = [(k, v) for k, v in parse_qsl(parts.query) if k == "img_index"]
+        parts = parts._replace(query=urlencode(keep), fragment="")
     return urlunsplit(parts)
+
+
+VIDEO_HOSTS = ("youtube.com", "youtu.be", "tiktok.com", "vimeo.com")
+
+
+def video_link_info(url):
+    """Label and icon for the link: reels and video sites say 'Watch video', other posts say 'View original post'."""
+    parts = urlsplit(url)
+    if "/reel/" in parts.path or "/tv/" in parts.path or parts.netloc.lower().endswith(VIDEO_HOSTS):
+        return "Watch video", ICON_PLAY
+    return "View original post", ICON_LINK
 
 
 def slugify(name):
@@ -283,9 +301,10 @@ def sheet_html(r, img_src, nav_html):
     if r["time"]:
         meta_items.append(f"<li>{ICON_TIME}<span>{esc(r['time'])}</span></li>")
     if r["video"]:
+        link_label, link_icon = video_link_info(r["video"])
         meta_items.append(
             f'<li><a class="watch" href="{esc(r["video"])}" target="_blank" rel="noopener noreferrer">'
-            f"{ICON_PLAY}<span>Watch video</span></a></li>"
+            f"{link_icon}<span>{esc(link_label)}</span></a></li>"
         )
     meta_html = f'<ul class="meta">{"".join(meta_items)}</ul>' if meta_items else ""
     sub_html = f'<p class="sub">{inline(r["description"])}</p>' if r["description"] else ""

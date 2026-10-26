@@ -32,7 +32,7 @@ time: 15 minutes                                              # optional, shown 
 tags: [breakfast, vegetarian]                                 # optional, used for filter chips and search
 cover: ../images/avocado-toast.jpg                            # optional hero image
 source: "@someone on Instagram"                               # optional credit, shown at the bottom
-video: https://www.instagram.com/reel/XXXXXXXXXXX/            # optional link, shown top right as "Watch video"
+video: https://www.instagram.com/reel/XXXXXXXXXXX/            # optional link, shown top right ("Watch video" for reels and video sites, "View original post" for other links)
 ---
 
 ## Ingredients
