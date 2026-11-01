@@ -30,8 +30,8 @@ NOTE_NAMES = {"notes", "tips", "note"}
 IMAGE_EXTS = ("jpg", "jpeg", "png", "webp")
 
 FONTS = (
-    "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400"
-    "&family=Open+Sans:wght@600;700&display=swap"
+    "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400"
+    "&family=Open+Sans:wdth,wght@75..100,300..800&display=swap"
 )
 
 ICON_SERVINGS = (
@@ -126,6 +126,27 @@ def video_link_info(url):
     if host == "instagram.com" or host.endswith(".instagram.com"):
         return "View original post", ICON_LINK
     return "View original recipe", ICON_LINK
+
+
+# Leading amount and unit of an ingredient line ("2 lb (900 g)", "½ tsp", "1–2 cups", "¼ tsp + ⅛ tsp").
+_FR = "¼½¾⅓⅔⅛⅜⅝⅞"
+_NUM = rf"(?:\d+(?:[.,]\d+)?\s?[{_FR}]?|\d+\s*/\s*\d+|[{_FR}])"
+_RANGE = rf"{_NUM}(?:\s?[–-]\s?{_NUM}|\s+to\s+{_NUM})?"
+_UNIT = (r"(?:tbsps?|tsps?|tablespoons?|teaspoons?|cups?|kg|g|ml|l|oz|lbs?|pounds?|cans?|cloves?|"
+         r"inch(?:es)?|cm|sticks?|slices?|bunch(?:es)?|sprigs?|pinch(?:es)?|handfuls?|packets?|pieces?)")
+_QTY = rf"{_RANGE}(?:\s*{_UNIT}\b)?(?:\s*\([^)]*\))?"
+AMOUNT_RE = re.compile(rf"^({_QTY}(?:\s*\+\s*{_QTY})*)(?=\s|$)", re.IGNORECASE)
+
+
+def bold_amount(text):
+    """Wrap the amount and unit at the start of an ingredient line in **bold**, if there is one."""
+    text = str(text).strip()
+    if text.startswith("*"):
+        return text
+    m = AMOUNT_RE.match(text)
+    if not m:
+        return text
+    return f"**{m.group(1).strip()}**" + text[m.end():]
 
 
 def slugify(name):
@@ -334,7 +355,7 @@ def sheet_html(r, img_src, nav_html):
     for g in r["ingredient_groups"]:
         if g["heading"]:
             ing_html += f"<h3>{inline(g['heading'])}</h3>"
-        ing_html += "<ul>" + "".join(f"<li>{inline(i)}</li>" for i in g["items"]) + "</ul>"
+        ing_html += "<ul>" + "".join(f"<li>{inline(bold_amount(i))}</li>" for i in g["items"]) + "</ul>"
 
     # A recipe without a method (some posts only list ingredients) gets a full-width ingredients card.
     if r["steps"]:
@@ -364,8 +385,8 @@ def sheet_html(r, img_src, nav_html):
     if r["source"]:
         credit = f'<p class="credit">Recipe credit: {inline(r["source"])}</p>'
 
-    return f"""{nav_html}
-<main class="sheet">
+    return f"""<main class="sheet">
+  {nav_html}
   <header class="sheet-head">
     <div>
       <h1>{esc(r["title"])}</h1>
@@ -388,7 +409,7 @@ def sheet_html(r, img_src, nav_html):
 
 def recipe_page(r, css):
     img = f"../{r['cover']}" if r["cover"] else None
-    nav = '<nav class="topnav"><a href="../index.html">&larr; All recipes</a></nav>'
+    nav = '<nav class="topnav"><a href="../index.html">All recipes</a></nav>'
     return page(f"{r['title']} · {SITE_TITLE}", r["description"], css, sheet_html(r, img, nav))
 
 
@@ -479,7 +500,7 @@ def index_page(recipes, css, js, single=False):
             )
             for r in recipes
         )
-        back = '<nav class="topnav"><a href="#" data-go="">&larr; All recipes</a></nav>'
+        back = '<nav class="topnav"><a href="#" data-go="">All recipes</a></nav>'
         views = "".join(
             f'<div data-view="{esc(r["slug"])}" hidden>'
             + sheet_html(r, data_uri(r["cover_src"]) if r["cover_src"] else None, back)
